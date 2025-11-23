@@ -1,119 +1,118 @@
-MATLAB MNIST Digit Recognizer (Custom IDX Reader + CNN)
+# MATLAB MNIST Digit Recognizer (Custom IDX Reader + CNN)
 
-This project implements a complete handwritten digit recognition system in MATLAB using a custom IDX parser and a Convolutional Neural Network (CNN).
-You manually load the MNIST dataset from raw .idx files and train a deep learning model without relying on built-in MNIST helper functions.
+This project implements a complete handwritten digit recognition system in MATLAB using a **custom IDX parser** and a **Convolutional Neural Network (CNN)**.
+The MNIST dataset is loaded manually from raw `.idx` files, validated, converted into arrays, and trained using MATLAB’s Deep Learning Toolbox.
 
-The workflow includes:
+---
 
-Reading MNIST image and label files in IDX binary format
+## 📌 Features
 
-Validating headers and converting data into MATLAB arrays
+* Manual MNIST `.idx` file reader (no helper scripts required)
+* Error-checked parsing for images and labels
+* Converts data into 4-D CNN-ready format (`28×28×1×N`)
+* Lightweight and clean CNN architecture
+* Uses Deep Learning Toolbox components (`trainNetwork`, `imageInputLayer`, etc.)
+* Includes training progress visualization
 
-Preparing training data (XTrain, YTrain)
+---
 
-Creating a CNN architecture
+## 📂 Project Structure
 
-Training the network using trainNetwork
-
-📌 Features
-
-Fully manual MNIST .idx file reader (no external scripts required)
-
-Error-checked image and label parsing
-
-Automatic conversion into 4-D CNN-ready format
-
-Clean and simple CNN architecture
-
-Uses Deep Learning Toolbox (trainNetwork, imageInputLayer, etc.)
-
-Training progress visualization
-
-📂 Project Structure
-|-- your_script.m          % Final code provided in this repository
-|-- t10k-images.idx3-ubyte % MNIST test images
-|-- t10k-labels.idx1-ubyte % MNIST test labels
+```
+|-- your_script.m          % Final MATLAB code
+|-- t10k-images.idx3-ubyte % MNIST image file
+|-- t10k-labels.idx1-ubyte % MNIST label file
 |-- README.md
 |-- LICENSE
-🧠 How It Works
-1. Read MNIST images
+```
 
-Opens file in big-endian mode
+---
 
-Validates magic number (2051)
+## 🧠 How It Works
 
-Reads counts, dimensions, and individual pixel data
+### **1. Read MNIST Images**
 
-Converts each image into a 28×28 matrix
+* Opens the file in big-endian mode
+* Confirms the image magic number (2051)
+* Reads total images, rows, and columns
+* Loads each image as a `28×28` matrix
+* Stores all images in `imageCellArray`
 
-Stores images in imageCellArray
+### **2. Read MNIST Labels**
 
-2. Read MNIST labels
+* Confirms the label magic number (2049)
+* Ensures number of labels = number of images
+* Stores each label in `labelCellArray`
 
-Validates magic number (2049)
+### **3. Convert to CNN Format**
 
-Reads labels one by one
-
-Stores in labelCellArray
-
-3. Convert to 4-D CNN format
+```matlab
 XTrain(:,:,1,i) = imageCellArray{i};
 YTrain = categorical(labels);
-4. CNN Architecture
+```
 
-A simple but effective model:
+### **4. CNN Architecture**
 
-Input layer (28×28×1)
+* Input layer (28×28×1)
+* Conv → BatchNorm → ReLU
+* Max pooling
+* Conv → BatchNorm → ReLU
+* Fully connected (10 classes)
+* Softmax + classification layer
 
-Two convolution + batch normalization + ReLU blocks
+### **5. Training Configuration**
 
-Max pooling
+* Optimizer: SGDM
+* Epochs: 4
+* Learning rate: 0.01
+* Training-progress plot enabled
 
-Fully connected layer (10 classes)
+---
 
-Softmax + classification layer
+## ▶️ Running the Project
 
-5. Training
+1. Place both MNIST files in your project folder:
 
-Configured with:
+   * `t10k-images.idx3-ubyte`
+   * `t10k-labels.idx1-ubyte`
 
-Stochastic Gradient Descent with Momentum (SGDM)
+2. Run the main script:
 
-4 epochs
-
-Learning rate: 0.01
-
-Training progress appears automatically.
-
-▶️ Running the Project
-
-Place MNIST files (t10k-images.idx3-ubyte and t10k-labels.idx1-ubyte) in the project folder.
-
-Then run the script:
-
+```matlab
 run your_script.m
+```
 
-After training, the network is stored in:
+3. The trained network will be stored in:
 
+```matlab
 net
+```
 
-You can classify any processed image using:
+4. Classify any image like this:
 
+```matlab
 label = classify(net, XTrain(:,:,:,i));
-🏁 Result
+```
 
-This setup typically achieves high accuracy on MNIST using only a small CNN and minimal training time.
+---
 
-📄 License
+## 🏁 Result
 
-This project is under the MIT License (see LICENSE file).
+This minimal CNN achieves strong accuracy on MNIST despite its compact size and short training time.
 
-🎯 Future Enhancements
+---
 
-Add real-time digit prediction from webcam
+## 📄 License
 
-Add GUI for drawing digits
+This repository is licensed under the MIT License. See the `LICENSE` file for details.
 
-Test/train split using the full MNIST dataset
+---
 
-Replace CNN with deeper architecture (LeNet-5 / VGG-like)
+## 🎯 Future Enhancements
+
+* Add webcam-based real-time digit prediction
+* Add a GUI to draw digits and classify in real-time
+* Add full training/testing split using all MNIST files
+* Upgrade to deeper architectures (LeNet-5, VGG-like, etc.)
+
+---
