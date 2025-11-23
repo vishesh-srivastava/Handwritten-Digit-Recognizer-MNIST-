@@ -1,5 +1,4 @@
 
-
 clearvars; close all; clc
 
 %% FOR READING IMAGES
